@@ -18,10 +18,10 @@ STACKS SEGMENT
 STACKS ENDS
 
 CODES SEGMENT
-  ASSUME CS:CODES,DS:DATAS,SS:STACKS
+	ASSUME CS:CODES,DS:DATAS,SS:STACKS
 START:
-  MOV AX,DATAS
-  MOV DS,AX	;设置数据段寄存器
+	MOV AX,DATAS
+	MOV DS,AX	;设置数据段寄存器
 
 	MOV AX,STACKS
 	MOV SS,AX	;设置栈段寄存器
@@ -41,14 +41,12 @@ START:
 	MOV AH,01
 	INT 21H		;等待输入，暂停作用
 
-	
-	
 	POP AX		;AX出栈
 	MOV AH,00H
 	INT 10H		;恢复原来显示方式
 	
-  MOV AX,4C00H	;退出程序
-  INT 21H
+	MOV AX,4C00H	;退出程序
+	INT 21H
 	
 	
 ;MOVSW指令将DS:SI中数据按字传送至ES:DI
@@ -77,7 +75,5 @@ START:
 		LOOP DIS1
 	RET
 ;-----------------------------
-
-
 CODES ENDS
-    END START
+	END START
