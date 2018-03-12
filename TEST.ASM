@@ -1,6 +1,6 @@
 DATAS SEGMENT
 ;字模数据，可用字模生成程序生成，替换掉此处即可，此处使用的时16*16的黑体字模，32byte/字
-	TESTWORD 	DB 000H,00CH,04FH,08CH,06FH,0ACH,028H,0ACH,00AH,0ACH,04AH,0ACH,06AH,0ACH,02AH,0ACH
+	TW 	DB 000H,00CH,04FH,08CH,06FH,0ACH,028H,0ACH,00AH,0ACH,04AH,0ACH,06AH,0ACH,02AH,0ACH
 			DB 00AH,0ACH,02AH,0ACH,022H,02CH,026H,08CH,064H,0CCH,04CH,05CH,048H,018H,000H,000H
 
 			DB 000H,068H,060H,06CH,030H,064H,037H,0FEH,007H,0FEH,0F0H,060H,0F7H,0E0H,037H,0E0H
@@ -21,29 +21,29 @@ CODES SEGMENT
 	ASSUME CS:CODES,DS:DATAS,SS:STACKS
 START:
 	MOV AX,DATAS
-	MOV DS,AX	;设置数据段寄存器
+	MOV DS,AX			;设置数据段寄存器
 
 	MOV AX,STACKS
-	MOV SS,AX	;设置栈段寄存器
-	MOV SP,20	;设置栈顶偏移地址
+	MOV SS,AX			;设置栈段寄存器
+	MOV SP,20			;设置栈顶偏移地址
 	
 	MOV AH,0FH 
-	INT	10H		;读当前显示方式至AX中
+	INT 10H				;读当前显示方式至AX中
 	
-	PUSH AX		;当前显示方式入栈
+	PUSH AX				;当前显示方式入栈
 	
 	MOV AX,12H	
-	INT 10H		;设置显示方式为VGA彩色
+	INT 10H				;设置显示方式为VGA彩色
 	
-	MOV DI,0		;DI为显示的位置，640*480分辨率，可显示80*60字节，故第i行汉字写入DI偏移地址80*16*i~80*16*i+78，相邻汉字DI差2
-	CALL DISPLAY		;调用显示过程
+	MOV DI,0			;DI为显示的位置，640*480分辨率，可显示80*60字节，故第i行汉字写入DI偏移地址80*16*i~80*16*i+78，相邻汉字DI差2
+	CALL DISPLAY	;调用显示过程
 	
 	MOV AH,01
-	INT 21H		;等待输入，暂停作用
+	INT 21H				;等待输入，暂停作用
 
-	POP AX		;AX出栈
+	POP AX				;AX出栈
 	MOV AH,00H
-	INT 10H		;恢复原来显示方式
+	INT 10H				;恢复原来显示方式
 	
 	MOV AX,4C00H	;退出程序
 	INT 21H
@@ -54,10 +54,10 @@ START:
 	DISPLAY:	
 	;输出 ‘测试文字’--------------------
 		MOV AX,0A000H	;VGA写入起始段地址
-		MOV ES,AX	;设置传送目标段地址
-		CLD	;CLD指令使DF=0,正向传输字
-		MOV CX,4				;连续的字数，此处“测试文字”共4字
-		LEA SI,TESTWORD		;每个字的首地址
+		MOV ES,AX			;设置传送目标段地址
+		CLD						;CLD指令使DF=0,正向传输字
+		MOV CX,4			;连续的字数，此处“测试文字”共4字
+		LEA SI,TW			;每个字的首地址
 		DIS1:
 			PUSH CX			;多重循环，CX入栈
 			PUSH SI
@@ -65,13 +65,13 @@ START:
 			MOV CX,16
 			DISWORD1:
 				MOVSW
-				ADD DI,78		;转到下一行字模写入位置，一个汉字16*16，故需写16行
+				ADD DI,78	;转到下一行字模写入位置，一个汉字16*16，故需写16行
 			LOOP DISWORD1
 			POP DI
 			POP SI
 			POP CX
-			ADD SI,32			;读取下一个汉字的字模数据，由于一个汉字占用32byte，故加上32
-			ADD DI,2			;开始写下一个汉字，默认写在上一个字右边
+			ADD SI,32		;读取下一个汉字的字模数据，由于一个汉字占用32byte，故加上32
+			ADD DI,2		;开始写下一个汉字，默认写在上一个字右边
 		LOOP DIS1
 	RET
 ;-----------------------------
