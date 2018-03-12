@@ -36,7 +36,7 @@ START:
 	INT 10H				;设置显示方式为VGA彩色
 	
 	MOV DI,0			;DI为显示的位置，640*480分辨率，可显示80*60字节，故第i行汉字写入DI偏移地址80*16*i~80*16*i+78，相邻汉字DI差2
-	CALL DISPLAY	;调用显示过程
+	CALL DISPLAY		;调用显示过程
 	
 	MOV AH,01
 	INT 21H				;等待输入，暂停作用
@@ -45,7 +45,7 @@ START:
 	MOV AH,00H
 	INT 10H				;恢复原来显示方式
 	
-	MOV AX,4C00H	;退出程序
+	MOV AX,4C00H		;退出程序
 	INT 21H
 	
 	
@@ -55,7 +55,7 @@ START:
 	;输出 ‘测试文字’--------------------
 		MOV AX,0A000H	;VGA写入起始段地址
 		MOV ES,AX			;设置传送目标段地址
-		CLD						;CLD指令使DF=0,正向传输字
+		CLD					;CLD指令使DF=0,正向传输字
 		MOV CX,4			;连续的字数，此处“测试文字”共4字
 		LEA SI,TW			;每个字的首地址
 		DIS1:
