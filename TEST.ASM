@@ -57,7 +57,7 @@ START:
 		MOV ES,AX			;设置传送目标段地址
 		CLD				;CLD指令使DF=0,正向传输字
 		MOV CX,4			;连续的字数，此处“测试文字”共4字
-		LEA SI,TW			;每个字的首地址
+		LEA SI,TW			;需写入汉字字模的首地址
 		DIS1:
 			PUSH CX			;多重循环，CX入栈
 			PUSH SI
