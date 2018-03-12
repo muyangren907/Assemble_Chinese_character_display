@@ -1,5 +1,5 @@
 
-Assemble_Chinese_character_display
+8086汇编显示中文
 ===========
 
 ![](https://raw.githubusercontent.com/muyangren907/Assemble_Chinese_character_display/master/screenshots/1.png)
